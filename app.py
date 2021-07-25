@@ -1,4 +1,3 @@
-from crypt import methods
 from flask import Flask, request, render_template, flash,  redirect, url_for, send_from_directory, send_file, session
 from werkzeug.utils import secure_filename
 import os
@@ -7,10 +6,11 @@ from datetime import datetime
 from Passenger import views as passengerUrl
 from HotelStaf import views as hotelStafUrl
 from Admin import views as adminUrl
-
+from oracleCon import get_db, close_db
 
 app = Flask('app')
 app.debug = True
+app.secret_key = "mysecretkey"
 
 # Admin Urls 
 app.add_url_rule('/admin/Home', view_func = adminUrl.AdminHome)
@@ -41,72 +41,60 @@ def Home():
 def login():
     if request.method == "POST":
         try :
-            conn = sqlite3.connect("DataBase/quizAppDataBase.db")
+            conn = get_db()
             cursor = conn.cursor()
             email = str(request.form['email'])
             password = str(request.form["password"])
-            print(email , 'email' , password , 'password')
-            # mydoc = cursor.execute("SELECT * from USER")
-            mydoc = cursor.execute("SELECT * from USER WHERE USER_EMAIL = ? AND PASSWORD = ?", (email, password))
+            mydoc = cursor.execute("SELECT * from USERDETAILS WHERE U_EMAIL = :email AND U_PASSWORD = :password", email=email, password= password)
             myresult = mydoc.fetchone()
-
-            # print(myresult , type(myresult[0]) , 'myresult' , mydoc)
-            # cursor.close()
-            # conn.close()
+            cursor.close()
             if myresult:
                 session['email'] = str(myresult[1])
-                session['user_id'] = myresult[0]
-                session['user_role'] = str(myresult[4])
-                session['image_ids'] = test.readAllBlobData()
-                if myresult[4] == 'S':
-                    session['username'] , session['role_id']  = cursor.execute("SELECT STUDENT_NAME , STUDENT_ID from STUDENT WHERE USER_ID = ?", (myresult[0],)).fetchone()
-                    # course_ids = cursor.execute("SELECT COURSE_ID from ENROLLMENT WHERE STUDENT_ID = ?" , ( session['role_id'],)).fetchall()                    
-                    session['courses'] = cursor.execute("SELECT COURSE_ID , COURSE_NAME , TEACHER_ID from COURSE WHERE COURSE_ID IN ( SELECT COURSE_ID from ENROLLMENT_COURSE WHERE STUDENT_ID = ? )" , ( session['role_id'] , )).fetchall()
-                    session['quizes'] = cursor.execute("SELECT QUIZ_ID , QUIZ_NAME , TEACHER_ID , COURSE_ID from QUIZ WHERE QUIZ_ID IN ( SELECT QUIZ_ID from ENROLLMENT_QUIZ WHERE STUDENT_ID = ? )" , ( session['role_id'] , )).fetchall()
-                    cursor.close()
-                    conn.close()
-                    # print(course_ids , "course_ids")
-                    return redirect('/student/Home')
-                elif myresult[4] == 'T':
-                    session['username'] , session['role_id'] = cursor.execute("SELECT TEACHER_NAME , TEACHER_ID from TEACHER WHERE USER_ID = ?", (myresult[0],)).fetchone()
-                    session['courses'] = cursor.execute("SELECT COURSE_ID , COURSE_NAME from COURSE WHERE TEACHER_ID = ?" , ( session['role_id'],)).fetchall()
-                    cursor.close()
-                    conn.close()
-                    return redirect('/teacher/Home')
+                session['user_role'] = str(myresult[12])
+                if myresult[12] == 'P':
+                    # code for passenger
+                    return redirect('/Home')
+                elif myresult[12] == 'A':
+                    # code for admin
+                    return redirect('/admin/Home')
                 else:
                     return redirect('/admin/Home')
             else:
                 return render_template('login.html', msg='email id or password is not matching')
-        
+
         except Exception as e:
             return render_template('login.html', msg=e)
+    else:
+        return render_template('login.html')
 
 
 @app.route("/sign", methods=["GET", "POST"])
 def sign():
     if request.method == "POST":
         try:
-            conn = sqlite3.connect("DataBase/quizAppDataBase.db")
+            conn = get_db()
             cursor = conn.cursor()
             fname = str(request.form["fname"])
+            mname = str(request.form['mname'])
             lname = str(request.form["lname"])
             password = str(request.form["password"])
             email = str(request.form['email'])
             phone = str(request.form['phoneNo'])
-            cursor.execute("SELECT * from USER WHERE USER_EMAIL = ?", (str(email),))
+            state = str(request.form['state'])
+            district = str(request.form['district'])
+            addrline1 = str(request.form['addrline1'])
+            city = str(request.form['city'])
+            pincode = request.form['pincode']
+            cursor.execute("SELECT * from USERDETAILS WHERE U_EMAIL = :email", email = str(email))
             if cursor.fetchall():
                 return render_template("sign.html", msg="Email Already Exist Try Different")
             else:
-                cursor.execute("INSERT INTO USER(USER_EMAIL, PASSWORD, PHONE_NO) VALUES (?, ?, ?)",
-                            (str(email), str(password), int(phone)))
-                conn.commit()
+               userdata = dict(U_EMAIL = email, U_PASSWORD = password, U_PHONE = phone, U_F_NAME = fname, U_M_NAME = mname, U_L_NAME = lname, STATE = state, DISTRICT = district, CITY = city, PINCODE = pincode, LINE1 = addrline1, U_ROLE = 'P')
+               cursor.execute('insert into USERDETAILS (U_EMAIL,U_PASSWORD,U_PHONE,U_F_NAME,U_M_NAME,U_L_NAME,STATE,DISTRICT,CITY,PINCODE,LINE1,U_ROLE) values (:U_EMAIL, :U_PASSWORD, :U_PHONE, :U_F_NAME, :U_M_NAME, :U_L_NAME, :STATE, :DISTRICT, :CITY, :PINCODE, :LINE1, :U_ROLE)', userdata)
 
-                mydoc = cursor.execute("SELECT * from USER WHERE USER_EMAIL = ?" , (str(email),))
-                myresult = mydoc.fetchone()
-
-                cursor.execute("UPDATE STUDENT SET STUDENT_NAME = ? WHERE USER_ID = ?",
-                            (str(fname) + ' ' + str(lname), int(myresult[0])))
-                conn.commit()
+               mydoc = cursor.execute("SELECT * from USERDETAILS WHERE U_EMAIL = :email" , email = str(email))
+               myresult = mydoc.fetchone()
+               conn.commit()
 
                 # print('Singin User :', myresult)
                 # session['username'] = str(fname)+" "+str(lname)
@@ -114,12 +102,13 @@ def sign():
                 # session['user_id'] = myresult[0]
                 # session['user_role'] = str(myresult[4])
             cursor.close()
-            conn.close()
+            # conn.close()
             return render_template('login.html', msg = 'Successfully Registered')
 
         except Exception as e:
             return render_template('sign.html', msg=e)
-        
+    else:
+        return render_template('sign.html')
 
 
 
