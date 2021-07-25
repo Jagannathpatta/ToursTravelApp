@@ -1,4 +1,4 @@
-# from crypt import methods
+from crypt import methods
 from flask import Flask, request, render_template, flash,  redirect, url_for, send_from_directory, send_file, session
 from werkzeug.utils import secure_filename
 import os
@@ -12,12 +12,20 @@ from Admin import views as adminUrl
 app = Flask('app')
 app.debug = True
 
-
+# Admin Urls 
 app.add_url_rule('/admin/Home', view_func = adminUrl.AdminHome)
-app.add_url_rule('/hotelstaf/Home', view_func = hotelStafUrl.HotelStafHome)
-app.add_url_rule('/Home', view_func = passengerUrl.PassengerHome)
 app.add_url_rule('/admin/Home', view_func = adminUrl.AdminContact)
-app.add_url_rule('/Home/signup', view_func = passengerUrl.PassengerSignUp, methods=["POST"])
+
+
+
+# Hotel Staff Urls
+app.add_url_rule('/hotelstaf/Home', view_func = hotelStafUrl.HotelStafHome)
+
+
+#Passenger Urls
+app.add_url_rule('/Home', view_func = passengerUrl.PassengerHome)
+
+
 
 @app.route('/', methods=['GET', 'POST'])
 def Home():  
