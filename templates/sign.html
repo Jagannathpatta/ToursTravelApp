@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="jumbotron p-5 col-sm-6 offset-sm-3 text-center border-primary">
+    <strong > <h1> <legend> SignIn </legend> </h1>  </strong>
+    <br>
+    <hr>
+    <form class="p-3" action="/sign" method="post">
+        <div class="form-group">
+            <strong> <label>{{msg}}</label>  </strong> 
+        </div>
+    
+        <div class="form-group">
+            <label for="fname"><h5>First Name:</h5></label>
+            <input type="text" autocomplete="off" required class="form-control" id="fname" name="fname" aria-describedby="fnameHelp" placeholder="Enter First Name">
+            <!-- <small id="fnameHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+          </div>
+    
+        <div class="form-group">
+            <label for="lname"><h5>Last Name:</h5></label>
+            <input type="text" autocomplete="off" required class="form-control" id="lname" name="lname" aria-describedby="lnameHelp" placeholder="Enter Last Name" >
+            <!-- <small id="lnameHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+          </div>
+
+          <div class="form-group">
+            <label for="email"><h5>User Email:</h5></label>
+            <input type="email" autocomplete="off" required class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Enter email">
+            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="phoneNo"><h5>User Phone No:</h5></label>
+            <input type="number" autocomplete="off" required class="form-control" id="phoneNo" name="phoneNo" aria-describedby="phoneNoHelp" placeholder="Enter phoneNo">
+            <small id="phoneNoHelp" class="form-text text-muted">We'll never share your phoneNo with anyone else.</small>
+          </div>
+
+      
+        <div class="form-group">
+            <label for="password"><h5>Password:</h5></label>
+            <input type="password" autocomplete="off" required class="form-control" id="password" name="password" aria-describedby="passwordHelp" placeholder="Enter password">
+            <!-- <small id="passwordHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+          </div>
+
+          <button type="submit" class="btn btn-primary"> SignIn </button>
+       
+    </form>
+</div>
+
+
+
+{% endblock %}
