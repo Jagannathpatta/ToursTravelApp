@@ -16,6 +16,7 @@ app.debug = True
 app.add_url_rule('/admin/Home', view_func = adminUrl.AdminHome)
 app.add_url_rule('/hotelstaf/Home', view_func = hotelStafUrl.HotelStafHome)
 app.add_url_rule('/Home', view_func = passengerUrl.PassengerHome)
+app.add_url_rule('/admin/Home', view_func = adminUrl.AdminContact)
 
 @app.route('/', methods=['GET', 'POST'])
 def Home():  

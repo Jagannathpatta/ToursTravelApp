@@ -4,3 +4,6 @@ import os
 
 def AdminHome():
     return render_template('/AdminSite/AdminHome.html')
+
+def AdminContact():
+    return render_template('/AdminSite/AdminHome.html')
