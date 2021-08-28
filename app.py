@@ -60,7 +60,7 @@ def login():
                     # code for admin
                     return redirect('/admin/Home')
                 else:
-                    return redirect('/admin/Home')
+                    return redirect('/Home')
             else:
                 return render_template('login.html', msg='email id or password is not matching')
 
@@ -112,12 +112,11 @@ def sign():
     else:
         return render_template('sign.html')
 
+
 @app.route("/logout", methods=["GET", "POST"])
 def logout():
     session.clear()
     return redirect("/")
-
-
 
 if __name__ == "__main__":   
     app.run(host='0.0.0.0', port=3000, debug=True ) # localhost
