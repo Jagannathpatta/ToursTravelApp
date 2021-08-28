@@ -1,120 +1,17 @@
 {% extends "base.html" %} {% block content %}
 
+<link rel="stylesheet" href="/static/homepassenger.css">
 <div>
-    <h1>Welcome to passenger page</h1>
-</div>
-<!-- <div class="conatiner">
-  <div class="row justify-content-center">
-    <div class="col-4">
-      <h1 style="text-align: center" class="text-primary">User Registration</h1>
-      <form method="POST" action="/Home/signup">
-        <div class="mb-2">
-          <label for="fname" class="form-label">First Name</label>
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            id="fname"
-            name="fname"
-            required
-          />
-        </div>
-        <div class="mb-2">
-          <label for="mname" class="form-label">Middle Name</label>
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            id="mname"
-            name="mname"
-            required
-          />
-        </div>
-        <div class="mb-2">
-          <label for="lname" class="form-label">Last Name</label>
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            id="lname"
-            name="lname"
-          />
-        </div>
-        <div class="mb-2">
-          <label for="addrline1" class="form-label">Address Line 1</label>
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            id="addrline1"
-            name="addrline1"
-          />
-        </div>
-        <div class="mb-2">
-          <label for="state" class="form-label">State</label>
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            id="state"
-            name="state"
-          />
-        </div>
-        <div class="mb-2">
-          <label for="district" class="form-label">District</label>
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            id="district"
-            name="district"
-          />
-        </div>
-        <div class="mb-2">
-          <label for="district" class="form-label">City</label>
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            id="city"
-            name="city"
-          />
-        </div>
-        <div class="mb-2">
-          <label for="pincode" class="form-label">Pin Code</label>
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            id="pincode"
-            name="pincode"
-          />
-        </div>
-        <div class="mb-2">
-          <label for="phoneno" class="form-label">Phone No</label>
-          <input
-            type="text"
-            class="form-control form-control-sm"
-            id="phoneno"
-            name="phoneno"
-          />
-        </div>
-        <div class="mb-2">
-          <label for="email" class="form-label">Email</label>
-          <input
-            type="email"
-            class="form-control form-control-sm"
-            id="email"
-            name="email"
-          />
-        </div>
-        <div class="mb-2">
-          <label for="password" class="form-label">Password</label>
-          <input
-            type="password"
-            class="form-control form-control-sm"
-            id="password"
-            name="password"
-          />
-        </div>
-        <div>
-          <button type="submit" class="btn btn-primary mb-3">Register</button>
-        </div>
-      </form>
+    <h2 class="m-2">Welcome {{fname}}</h2>
+    <h2 class="m-2">Top Offers</h2>
+    <div class="card m-2" style="width: 18rem; box-shadow:3px 3px 20px 0px rgba(52, 41, 29, 0.47); ">
+      <img class="card-img-top" src="..." alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">Card title</h5>
+        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+        <a href="#" class="btn btn-primary">Go somewhere</a>
+      </div>
     </div>
-  </div>
-</div> -->
+</div>
 
 {% endblock %}
