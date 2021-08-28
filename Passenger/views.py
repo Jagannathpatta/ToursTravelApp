@@ -4,7 +4,13 @@ import os
 from oracleCon import get_db, close_db
 
 def PassengerHome():
-    return render_template('/PassengerSite/PassengerHome.html')
+    conn = get_db()
+    cursor = conn.cursor()
+    resultset = cursor.execute("select * from location where l_id = 1")
+    locationResult = resultset.fetchone()
+    cursor.close()
+    print(locationResult)
+    return render_template('/PassengerSite/PassengerHome.html', fname=session['fname'], location= locationResult)
 
 def PassengerSignUp():
     connection = get_db()

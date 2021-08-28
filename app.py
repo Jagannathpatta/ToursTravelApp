@@ -12,6 +12,7 @@ app = Flask('app')
 app.debug = True
 app.secret_key = "mysecretkey"
 
+
 # Admin Urls 
 app.add_url_rule('/admin/Home', view_func = adminUrl.AdminHome)
 app.add_url_rule('/admin/Home', view_func = adminUrl.AdminContact)
@@ -51,10 +52,11 @@ def login():
             if myresult:
                 session['email'] = str(myresult[1])
                 session['user_role'] = str(myresult[12])
-                if myresult[12] == 'P':
+                session['fname'] = str(myresult[4])
+                if myresult[12].strip() == "P":
                     # code for passenger
                     return redirect('/Home')
-                elif myresult[12] == 'A':
+                elif myresult[12].strip() == "A":
                     # code for admin
                     return redirect('/admin/Home')
                 else:
@@ -110,12 +112,12 @@ def sign():
     else:
         return render_template('sign.html')
 
-@app.route('/logout', methods=["GET", "POST"])
+
+@app.route("/logout", methods=["GET", "POST"])
 def logout():
     session.clear()
-    return redirect('/Home')
+    return redirect("/")
 
 if __name__ == "__main__":   
-    app.run(host='0.0.0.0', port=3000 ) # localhost
+    app.run(host='0.0.0.0', port=3000, debug=True ) # localhost
     # app.run(host='192.168.0.106', port=8080 )  #Router
-    # app.run()
